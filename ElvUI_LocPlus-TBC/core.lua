@@ -35,6 +35,19 @@ local classColor = E:ClassColor(E.myclass, true)
 local COORDS_WIDTH = 30 -- Coord panels width
 local SPACING = 1 		-- Panel spacing
 
+function LP:cOption(name, color)
+	local hex
+	if color == "blue" then
+		hex = '|cff00c0fa%s |r'
+	elseif color == "orange" then
+		hex = '|cffffa500%s |r'
+	elseif color == "gradient" then
+		hex = E:TextGradient(name, 1, 0.65, 0, 1, 0.65, 0, 1, 1, 1)
+	end
+
+	return (hex):format(name)
+end
+
 -- mouse over the location panel
 local function LocPanel_OnEnter(self)
 	local db = E.db.locplus
@@ -526,10 +539,10 @@ function LP:AddOptions()
 end
 
 local function InjectDatatextOptions()
-	E.Options.args.datatexts.args.panels.args.LocPlusLeftDT.name = L['LocationPlus Left Panel']
+	E.Options.args.datatexts.args.panels.args.LocPlusLeftDT.name = LP.Title..LP:cOption(L['Left Panel'], "blue")
 	E.Options.args.datatexts.args.panels.args.LocPlusLeftDT.order = 1101
 
-	E.Options.args.datatexts.args.panels.args.LocPlusRightDT.name = L['LocationPlus Right Panel']
+	E.Options.args.datatexts.args.panels.args.LocPlusRightDT.name = LP.Title..LP:cOption(L['Right Panel'], "blue")
 	E.Options.args.datatexts.args.panels.args.LocPlusRightDT.order = 1102
 end
 
