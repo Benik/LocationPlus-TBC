@@ -1,2 +1,5 @@
+[b]1.01[/b] May 30, 2021
+*Fixed an error in koKR translation
+
 [b]1.00[/b] May 30, 2021
 *Initial port to TBC from retail. Credit: thurin
