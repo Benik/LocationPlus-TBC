@@ -1,3 +1,6 @@
+[b]1.02[/b] Jun 30, 2021
+LibTouristClassic-1.0 update for TBC
+
 [b]1.01[/b] May 30, 2021
 *Fixed an error in koKR translation
 
