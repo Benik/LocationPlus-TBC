@@ -1,8 +1,8 @@
-## Interface: 90002
+## Interface: 20501
 ## LoadOnDemand: 1
-## Title: Lib: Tourist-3.0
+## Title: Lib: TouristClassic-1.0
 ## Notes: A library to provide information about zones and instances.
-## Author: Odica
+## Author: Odica, Mishikal1
 ## X-Category: Library
 
 lib.xml

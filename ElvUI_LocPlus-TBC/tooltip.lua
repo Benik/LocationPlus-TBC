@@ -1,6 +1,6 @@
 local E, L, V, P, G = unpack(ElvUI);
 local LP = E:GetModule('LocationPlus')
-local T = LibStub('LibTourist-3.0');
+local T = LibStub('LibTouristClassic-1.0');
 
 local format, tonumber, pairs, tinsert = string.format, tonumber, pairs, table.insert
 
@@ -18,101 +18,9 @@ local PROFESSIONS_FISHING, LEVEL_RANGE, STATUS, HOME, CONTINENT, PVP, RAID = PRO
 -- GLOBALS: selectioncolor, continent, continentID
 
 -- Icons on Location Panel
-local FISH_ICON = "|TInterface\\AddOns\\ElvUI_LocPlus\\media\\fish.tga:14:14|t"
-local PET_ICON = "|TInterface\\AddOns\\ElvUI_LocPlus\\media\\pet.tga:14:14|t"
-local LEVEL_ICON = "|TInterface\\AddOns\\ElvUI_LocPlus\\media\\levelup.tga:14:14|t"
-
---------------------
--- Currency Table --
---------------------
--- Add below the currency id you wish to track. 
--- Find the currency ids: http://www.wowhead.com/currencies .
--- Click on the wanted currency and in the address you will see the id.
--- e.g. for Bloody Coin, you will see http://www.wowhead.com/currency=789 . 789 is the id.
--- So, on this case, add 789, (don't forget the comma).
--- If there are 0 earned points, the currency will be filtered out.
-
-local currency = {
-	--395,	-- Justice Points
-	--396,	-- Valor Points
-	--777,	-- Timeless Coins
-	--697,	-- Elder Charm of Good Fortune
-	--738,	-- Lesser Charm of Good Fortune
-	--390,	-- Conquest Points
-	--392,	-- Honor Points
-	--515,	-- Darkmoon Prize Ticket
-	--402,	-- Ironpaw Token
-	--776,	-- Warforged Seal
-	
-	-- WoD
-	--824,	-- Garrison Resources
-	--823,	-- Apexis Crystal (for gear, like the valors)
-	--994,	-- Seal of Tempered Fate (Raid loot roll)
-	--980,	-- Dingy Iron Coins (rogue only, from pickpocketing)
-	--944,	-- Artifact Fragment (PvP)
-	--1101,	-- Oil
-	--1129,	-- Seal of Inevitable Fate
-	--821,	-- Draenor Clans Archaeology Fragment
-	--828,	-- Ogre Archaeology Fragment
-	--829,	-- Arakkoa Archaeology Fragment
-	--1166, -- Timewarped Badge (6.22)
-	--1191,	-- Valor Points (6.23)
-	
-	-- Legion
-	--1226,	-- Nethershard (Invasion scenarios)
-	--1172,	-- Highborne Archaeology Fragment
-	--1173,	-- Highmountain Tauren Archaeology Fragment
-	--1155,	-- Ancient Mana
-	--1220,	-- Order Resources
-	--1275,	-- Curious Coin (Buy stuff :P)
-	--1226,	-- Nethershard (Invasion scenarios)
-	--1273,	-- Seal of Broken Fate (Raid)
-	--1154,	-- Shadowy Coins
-	--1149,	-- Sightless Eye (PvP)
-	--1268,	-- Timeworn Artifact (Honor Points?)
-	--1299,	-- Brawler's Gold
-	--1314,	-- Lingering Soul Fragment (Good luck with this one :D)
-	--1342,	-- Legionfall War Supplies (Construction at the Broken Shore)
-	--1355,	-- Felessence (Craft Legentary items)
-	--1356,	-- Echoes of Battle (PvP Gear)
-	--1357,	-- Echoes of Domination (Elite PvP Gear)
-	--1416,	-- Coins of Air
-	--1506,	-- Argus Waystone
-	--1508,	-- Veiled Argunite
-	--1533,	-- Wakening Essence
-
-	-- BfA
-	--1560, -- War Resources
-	--1580,	-- Seal of Wartorn Fate
-	--1587,	-- War Supplies
-	--1710,	-- Seafarer's Dubloon
-	--1718,	-- Titan Residuum
-	--1719,	-- Corrupted Memento
-	--1721,	-- Prismatic Manapearl
-	--1755,	-- Coalescing Visions
-	--1803,	-- Echoes of Ny'alotha
-
-	-- Shadowlands
-	1751,	-- Freed Soul
-	1754,	-- Argent Commendation
-	1767,   -- Stygia
-	1810,	-- Willing Soul
-	1813,	-- Reservoir Anima
-	1816,   -- Sinstone Fragments
-	1820,	-- Infused Ruby
-	1822,	-- Renown
-	1828, 	-- Soul Ash
-	1885,   -- Grateful Offering
-	1792,	-- Honor
-	1602,	-- New Conquest Points
-	1191,	-- Valor
-}
-
---[[if E.myfaction == 'Alliance' then
-	tinsert(currency, 1717)
-elseif E.myfaction == 'Horde' then
-	tinsert(currency, 1716)
-end]]
+local FISH_ICON = "|TInterface\\AddOns\\ElvUI_LocPlus-TBC\\media\\fish.tga:14:14|t"
+local PET_ICON = "|TInterface\\AddOns\\ElvUI_LocPlus-TBC\\media\\pet.tga:14:14|t"
+local LEVEL_ICON = "|TInterface\\AddOns\\ElvUI_LocPlus-TBC\\media\\levelup.tga:14:14|t"
 
 -----------------------
 -- Tooltip functions --
@@ -147,7 +55,7 @@ end
 	isPvP = nil;
 	isRaid = nil;
 
-	if(T:IsArena(zone) or T:IsBattleground(zone)) then
+	if T:IsBattleground(zone) then
 		if E.db.locplus.tthidepvp then
 			return;
 		end
@@ -340,34 +248,6 @@ function LP:GetLevelRange(zoneText, ontt)
 	return dlevel or ""
 end
 
--- PetBattle Range
-function LP:GetBattlePetLvl(zoneText, ontt)
-	local mapID = C_Map_GetBestMapForUnit("player")
-	local zoneText = T:GetMapNameByIDAlt(mapID) or UNKNOWN;
-	local uniqueZone = T:GetUniqueZoneNameForLookup(zoneText, continentID)
-	local low,high = T:GetBattlePetLevel(uniqueZone)
-	local plevel
-	if low ~= nil or high ~= nil then
-		if low ~= high then
-			plevel = format("%d-%d", low, high)
-		else
-			plevel = format("%d", high)
-		end
-
-		if ontt then
-			return plevel
-		else
-			if E.db.locplus.showicon then
-				plevel = format(" (%s) ", plevel)..PET_ICON
-			else
-				plevel = format(" (%s) ", plevel)
-			end
-		end
-	end
-
-	return plevel or ""
-end
-
 function LP:UpdateTooltip()
 	local mapID = C_Map_GetBestMapForUnit("player")
 	local zoneText = T:GetMapNameByIDAlt(mapID) or UNKNOWN;
@@ -394,14 +274,6 @@ function LP:UpdateTooltip()
 		local checklvl = LP:GetLevelRange(zoneText, true)
 		if checklvl ~= "" then
 			GameTooltip:AddDoubleLine(LEVEL_RANGE.." : ", checklvl, 1, 1, 1)
-		end
-	end
-
-	-- Battle Pet Levels
-	if E.db.locplus.petlevel then
-		local checkbpet = LP:GetBattlePetLvl(zoneText, true)
-		if checkbpet ~= "" then
-			GameTooltip:AddDoubleLine(L["Battle Pet level"].. " :", checkbpet, 1, 1, 1, selectioncolor)
 		end
 	end
 
@@ -437,51 +309,51 @@ function LP:UpdateTooltip()
 	end
 
 	-- Currency
-	local numEntries = C_CurrencyInfo_GetCurrencyListSize() -- Check for entries to disable the tooltip title when no currency
-	if E.db.locplus.curr and numEntries > 0 then
-		GameTooltip:AddLine(" ")
-		GameTooltip:AddLine(TOKENS.." :", selectioncolor)
+	-- local numEntries = C_CurrencyInfo_GetCurrencyListSize() -- Check for entries to disable the tooltip title when no currency
+	-- if E.db.locplus.curr and numEntries > 0 then
+	-- 	GameTooltip:AddLine(" ")
+	-- 	GameTooltip:AddLine(TOKENS.." :", selectioncolor)
 
-		for _, id in pairs(currency) do
-			local name, amount, icon, totalMax = GetTokenInfo(id)
+	-- 	for _, id in pairs(currency) do
+	-- 		local name, amount, icon, totalMax = GetTokenInfo(id)
 
-			if(name and amount > 0) then
-				icon = ("|T%s:12:12:1:0|t"):format(icon)
+	-- 		if(name and amount > 0) then
+	-- 			icon = ("|T%s:12:12:1:0|t"):format(icon)
 
-				if id == 1822 then -- Renown "cheat"
-					amount = amount + 1
-					totalMax = totalMax + 1
-				end
+	-- 			if id == 1822 then -- Renown "cheat"
+	-- 				amount = amount + 1
+	-- 				totalMax = totalMax + 1
+	-- 			end
 
-				if totalMax == 0 then
-					GameTooltip:AddDoubleLine(icon..format(" %s : ", name), format("%s", amount ), 1, 1, 1, selectioncolor)
-				else
-					GameTooltip:AddDoubleLine(icon..format(" %s : ", name), format("%s / %s", amount, totalMax ), 1, 1, 1, selectioncolor)
-				end
-			end
-		end
-	end
+	-- 			if totalMax == 0 then
+	-- 				GameTooltip:AddDoubleLine(icon..format(" %s : ", name), format("%s", amount ), 1, 1, 1, selectioncolor)
+	-- 			else
+	-- 				GameTooltip:AddDoubleLine(icon..format(" %s : ", name), format("%s / %s", amount, totalMax ), 1, 1, 1, selectioncolor)
+	-- 			end
+	-- 		end
+	-- 	end
+	-- end
 
 	-- Professions
-	local prof1, prof2, archy, fishing, cooking, firstAid = GetProfessions()
-	if E.db.locplus.prof and (prof1 or prof2 or archy or fishing or cooking or firstAid) then	
-		GameTooltip:AddLine(" ")
-		GameTooltip:AddLine(TRADE_SKILLS.." :", selectioncolor)
+	-- local prof1, prof2, archy, fishing, cooking, firstAid = GetProfessions()
+	-- if E.db.locplus.prof and (prof1 or prof2 or archy or fishing or cooking or firstAid) then	
+	-- 	GameTooltip:AddLine(" ")
+	-- 	GameTooltip:AddLine(TRADE_SKILLS.." :", selectioncolor)
 		
-		local proftable = { GetProfessions() }
-		for _, id in pairs(proftable) do
-			local name, icon, rank, maxRank, _, _, _, rankModifier = GetProfessionInfo(id)
+	-- 	local proftable = { GetProfessions() }
+	-- 	for _, id in pairs(proftable) do
+	-- 		local name, icon, rank, maxRank, _, _, _, rankModifier = GetProfessionInfo(id)
 
-			if rank < maxRank or (not E.db.locplus.profcap) then
-				icon = ("|T%s:12:12:1:0|t"):format(icon)
-				if (rankModifier and rankModifier > 0) then
-					GameTooltip:AddDoubleLine(format("%s %s :", icon, name), (format("%s |cFF6b8df4+ %s|r / %s", rank, rankModifier, maxRank)), 1, 1, 1, selectioncolor)				
-				else
-					GameTooltip:AddDoubleLine(format("%s %s :", icon, name), (format("%s / %s", rank, maxRank)), 1, 1, 1, selectioncolor)
-				end
-			end
-		end
-	end
+	-- 		if rank < maxRank or (not E.db.locplus.profcap) then
+	-- 			icon = ("|T%s:12:12:1:0|t"):format(icon)
+	-- 			if (rankModifier and rankModifier > 0) then
+	-- 				GameTooltip:AddDoubleLine(format("%s %s :", icon, name), (format("%s |cFF6b8df4+ %s|r / %s", rank, rankModifier, maxRank)), 1, 1, 1, selectioncolor)				
+	-- 			else
+	-- 				GameTooltip:AddDoubleLine(format("%s %s :", icon, name), (format("%s / %s", rank, maxRank)), 1, 1, 1, selectioncolor)
+	-- 			end
+	-- 		end
+	-- 	end
+	-- end
 
 	-- Hints
 	if E.db.locplus.tt then

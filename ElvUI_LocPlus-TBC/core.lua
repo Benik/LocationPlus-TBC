@@ -25,7 +25,7 @@ local SANCTUARY_TERRITORY, ARENA, FRIENDLY, HOSTILE, CONTESTED_TERRITORY, COMBAT
 -- GLOBALS: LocationPlusPanel, LocPlusLeftDT, LocPlusRightDT, XCoordsPanel, YCoordsPanel, CUSTOM_CLASS_COLORS
 
 LP.Title = format('|cffffa500%s|r|cffffffff%s|r ', 'Location', 'Plus')
-LP.version = GetAddOnMetadata("ElvUI_LocPlus", "Version")
+LP.version = GetAddOnMetadata("ElvUI_LocPlus-TBC", "Version")
 LP.Config = {}
 
 if E.db.locplus == nil then E.db.locplus = {} end
@@ -34,6 +34,19 @@ local classColor = E:ClassColor(E.myclass, true)
 
 local COORDS_WIDTH = 30 -- Coord panels width
 local SPACING = 1 		-- Panel spacing
+
+function LP:cOption(name, color)
+	local hex
+	if color == "blue" then
+		hex = '|cff00c0fa%s |r'
+	elseif color == "orange" then
+		hex = '|cffffa500%s |r'
+	elseif color == "gradient" then
+		hex = E:TextGradient(name, 1, 0.65, 0, 1, 0.65, 0, 1, 1, 1)
+	end
+
+	return (hex):format(name)
+end
 
 -- mouse over the location panel
 local function LocPanel_OnEnter(self)
@@ -381,11 +394,6 @@ function LP:UpdateLocation()
 		if displaylvl ~= "" then
 			displayLine = displayLine..displaylvl
 		end
-	elseif db.displayOther == 'PET' then
-		local displaypet = LP:GetBattlePetLvl(zoneText) or ""
-		if displaypet ~= "" then
-			displayLine = displayLine..displaypet
-		end
 	else
 		displayLine = displayLine
 	end
@@ -531,10 +539,10 @@ function LP:AddOptions()
 end
 
 local function InjectDatatextOptions()
-	E.Options.args.datatexts.args.panels.args.LocPlusLeftDT.name = L['LocationPlus Left Panel']
+	E.Options.args.datatexts.args.panels.args.LocPlusLeftDT.name = LP.Title..LP:cOption(L['Left Panel'], "blue")
 	E.Options.args.datatexts.args.panels.args.LocPlusLeftDT.order = 1101
 
-	E.Options.args.datatexts.args.panels.args.LocPlusRightDT.name = L['LocationPlus Right Panel']
+	E.Options.args.datatexts.args.panels.args.LocPlusRightDT.name = LP.Title..LP:cOption(L['Right Panel'], "blue")
 	E.Options.args.datatexts.args.panels.args.LocPlusRightDT.order = 1102
 end
 

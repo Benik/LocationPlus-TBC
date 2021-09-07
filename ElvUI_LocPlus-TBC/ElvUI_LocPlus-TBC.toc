@@ -1,6 +1,6 @@
-﻿## Interface: 20501
+﻿## Interface: 20502
 ## Author: Benik
-## Version: 0.01
+## Version: 1.03
 ## Title: |cff1784d1ElvUI|r Location Plus - TBC
 ## Notes: a plugin for ElvUI TBC, that adds location, coords, 2 Datatexts and a tooltip full of info.
 ## RequiredDeps: ElvUI
