@@ -18,9 +18,9 @@ local PROFESSIONS_FISHING, LEVEL_RANGE, STATUS, HOME, CONTINENT, PVP, RAID = PRO
 -- GLOBALS: selectioncolor, continent, continentID
 
 -- Icons on Location Panel
-local FISH_ICON = "|TInterface\\AddOns\\ElvUI_LocPlus-TBC\\media\\fish.tga:14:14|t"
-local PET_ICON = "|TInterface\\AddOns\\ElvUI_LocPlus-TBC\\media\\pet.tga:14:14|t"
-local LEVEL_ICON = "|TInterface\\AddOns\\ElvUI_LocPlus-TBC\\media\\levelup.tga:14:14|t"
+local FISH_ICON = "|TInterface\\AddOns\\ElvUI_LocPlus\\media\\fish.tga:14:14|t"
+local PET_ICON = "|TInterface\\AddOns\\ElvUI_LocPlus\\media\\pet.tga:14:14|t"
+local LEVEL_ICON = "|TInterface\\AddOns\\ElvUI_LocPlus\\media\\levelup.tga:14:14|t"
 
 -----------------------
 -- Tooltip functions --
