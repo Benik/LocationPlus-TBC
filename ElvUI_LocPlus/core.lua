@@ -25,7 +25,7 @@ local SANCTUARY_TERRITORY, ARENA, FRIENDLY, HOSTILE, CONTESTED_TERRITORY, COMBAT
 -- GLOBALS: LocationPlusPanel, LocPlusLeftDT, LocPlusRightDT, XCoordsPanel, YCoordsPanel, CUSTOM_CLASS_COLORS
 
 LP.Title = format('|cffffa500%s|r|cffffffff%s|r ', 'Location', 'Plus')
-LP.version = GetAddOnMetadata("ElvUI_LocPlus-TBC", "Version")
+LP.version = GetAddOnMetadata("ElvUI_LocPlus", "Version")
 LP.Config = {}
 
 if E.db.locplus == nil then E.db.locplus = {} end
